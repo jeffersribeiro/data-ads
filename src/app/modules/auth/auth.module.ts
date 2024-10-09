@@ -4,7 +4,6 @@ import { UserRepository } from '@/app/database/repositories';
 
 import { Oauth2Service } from './services';
 import { Oauth2Controller } from './controllers';
-import { Repository } from '@/libs/database/repositories';
 
 @Module({
   controllers: [
@@ -19,7 +18,7 @@ import { Repository } from '@/libs/database/repositories';
       provide: Oauth2Service,
       useFactory: (
         httpClient: HttpClient,
-        repository: Repository,
+        repository: UserRepository,
       ): Oauth2Service => new Oauth2Service(httpClient, repository),
       inject: [AxiosClient, UserRepository],
     },

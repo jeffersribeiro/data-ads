@@ -1,18 +1,19 @@
 import 'dotenv/config';
 import express from 'express';
-import { ConfigService } from './libs/config';
+
+import { AppModule } from '@/app/app.module';
+import { ConfigService } from '@/libs/config';
+import { Factory } from '@/libs/framework/core';
 
 export default function bootstrap() {
-  const app = express();
+  const app = Factory.create(AppModule);
+
+  const config = app.get(ConfigService);
 
   app.use(express.json());
 
-  const config = new ConfigService();
-
   const port = config.getOrThrow('PORT');
 
-  const startMessage = `Project started successfully at http://localhost:${port}`;
-
-  app.listen(port, () => console.log(startMessage));
+  app.listen(port);
 }
 bootstrap();
