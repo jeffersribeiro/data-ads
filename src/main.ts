@@ -1,12 +1,14 @@
 import 'dotenv/config';
+import 'reflect-metadata';
+
 import express from 'express';
 
 import { AppModule } from '@/app/app.module';
 import { ConfigService } from '@/libs/config';
-import { Factory } from '@/libs/framework/core';
+import { AppFactory } from '@/libs/framework/core';
 
-export default function bootstrap() {
-  const app = Factory.create(AppModule);
+export default async function bootstrap() {
+  const app = await AppFactory.create(AppModule);
 
   const config = app.get(ConfigService);
 
@@ -16,4 +18,5 @@ export default function bootstrap() {
 
   app.listen(port);
 }
+
 bootstrap();

@@ -1,34 +1,50 @@
 import express, { Express } from 'express';
 
-class ServerFactory {
-  constructor(private readonly server: Express) {}
+const server: Express = express();
 
-  listen(port: number) {
+export class AppFactory {
+  constructor() {}
+
+  static listen(port: number) {
     const startMessage = `Project started successfully at http://localhost:${port}`;
 
-    this.server.listen(port, () => console.log(startMessage));
+    server.listen(port, () => console.log(startMessage));
   }
 
-  use(handler: any) {
-    this.server.use(handler);
+  static use(handler: any) {
+    server.use(handler);
   }
 
-  get(service: any) {
+  static get(service: any) {
     return new service();
   }
-}
 
-class AppFactory {
-  private readonly app: Express;
+  static async create(module: any): Promise<any> {
+    console.log('Initializing application with module:', module.name);
 
-  constructor() {
-    this.app = express();
+    // Acesse os imports e outras propriedades do módulo através de metadados (similar ao NestJS)
+    const moduleMetadata = Reflect.getMetadata('module', module);
+    if (moduleMetadata?.imports) {
+      console.log('Loading imports:', moduleMetadata.imports);
+
+      // Inicializar os módulos importados
+      for (const importedModule of moduleMetadata.imports) {
+        await this.initializeModule(importedModule);
+      }
+    }
+
+    // Inicializa o módulo principal (AppModule)
+    const appInstance = new module();
+    await appInstance.init?.(); // Chame o método init() caso ele exista
+    return appInstance;
   }
 
-  create(module: any): ServerFactory {
-    console.log(module);
-    return new ServerFactory(this.app);
+  private static async initializeModule(module: any) {
+    const moduleMetadata = Reflect.getMetadata('module', module);
+    if (moduleMetadata) {
+      console.log(`Inicializing ${module.name}`);
+      const instance = new module();
+      await instance.init?.();
+    }
   }
 }
-
-export const Factory = new AppFactory();

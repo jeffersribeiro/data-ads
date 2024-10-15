@@ -3,7 +3,7 @@ import { UserModule } from '@/app/modules/user/user.module';
 
 export const routes: Routes = [
   {
-    path: '/api/users',
+    path: '/users',
     module: UserModule,
   },
 ];

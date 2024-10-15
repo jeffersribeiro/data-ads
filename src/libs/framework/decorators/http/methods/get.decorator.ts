@@ -1,3 +1,7 @@
+const ROUTE_METADATA = 'route:path';
+
 export function Get(path?: string): any {
-  console.log(path);
+  return (target: any, propertyKey: string | symbol) => {
+    Reflect.defineMetadata(ROUTE_METADATA, path, target, propertyKey);
+  };
 }
