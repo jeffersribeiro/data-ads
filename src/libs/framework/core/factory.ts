@@ -2,24 +2,26 @@ import express, { Express } from 'express';
 
 const server: Express = express();
 
-export class AppFactory {
-  constructor() {}
-
-  static listen(port: number) {
+class Server {
+  listen(port: number) {
     const startMessage = `Project started successfully at http://localhost:${port}`;
 
     server.listen(port, () => console.log(startMessage));
   }
 
-  static use(handler: any) {
+  use(handler: any) {
     server.use(handler);
   }
 
-  static get(service: any) {
+  get(service: any) {
     return new service();
   }
+}
 
-  static async create(module: any): Promise<any> {
+export class AppFactory {
+  constructor() {}
+
+  static async create(module: any): Promise<Server> {
     console.log('Initializing application with module:', module.name);
 
     // Acesse os imports e outras propriedades do módulo através de metadados (similar ao NestJS)
@@ -36,7 +38,7 @@ export class AppFactory {
     // Inicializa o módulo principal (AppModule)
     const appInstance = new module();
     await appInstance.init?.(); // Chame o método init() caso ele exista
-    return appInstance;
+    return new Server();
   }
 
   private static async initializeModule(module: any) {

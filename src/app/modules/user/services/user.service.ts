@@ -1,6 +1,8 @@
 import { User } from '@/app/database/entities';
 import { UserRepository } from '@/app/database/repositories';
+import { Injectable } from '@/libs/framework/decorators';
 
+@Injectable()
 export class UserService {
   constructor(private readonly repo: UserRepository) {}
 

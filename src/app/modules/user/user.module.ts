@@ -5,12 +5,6 @@ import { UserRepository } from '@/app/database/repositories';
 
 @Module({
   controllers: [UserController],
-  providers: [
-    {
-      provide: UserService,
-      useFactory: (repo: UserRepository) => new UserService(repo),
-      inject: [UserRepository],
-    },
-  ],
+  providers: [UserService, UserRepository],
 })
 export class UserModule {}

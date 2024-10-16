@@ -10,6 +10,7 @@ export default [
   {
     rules: {
       '@typescript-eslint/no-explicit-any': 'warn',
+      'eslint@typescript-eslint/no-unused-vars': 'warn',
     },
   },
 ];

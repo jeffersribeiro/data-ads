@@ -1,5 +1,3 @@
-import 'reflect-metadata';
-
 const CONTROLLER_METADATA = 'controller:path';
 
 export function Controller(path?: any): ClassDecorator {
